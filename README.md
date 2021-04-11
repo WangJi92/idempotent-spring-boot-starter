@@ -165,12 +165,12 @@ public @interface Idempotent {
 <dependency>
   <groupId>org.redisson</groupId>
   <artifactId>redisson-spring-boot-starter</artifactId>
-  <version>${redisson.version}</version>
+  <version>3.15.3</version>
 </dependency>
 <dependency>
   <groupId>com.github.WangJi92</groupId>
   <artifactId>idempotent-spring-boot-starter</artifactId>
-  <version>3.15.3</version>
+  <version>0.0.1</version>
 </dependency>
 ```
 ### redission 配置
