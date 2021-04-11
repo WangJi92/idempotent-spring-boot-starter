@@ -46,7 +46,6 @@
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>${redisson.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.WangJi92</groupId>

@@ -27,7 +27,7 @@ public class IdempotentTestController {
     private HttpServletRequest request;
 
     /**
-     * 测试默认key
+     * 测试默认key sessionId+uri
      *
      * @return
      */
