@@ -8,15 +8,37 @@
         <version>2.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.wangji92.springboot</groupId>
+    <groupId>com.github.WangJi92</groupId>
     <artifactId>idempotent-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>idempotent-spring-boot-starter</name>
-    <description>防重复提交</description>
+    <description>幂等的，防止重复的提交，使用spring HandlerInterceptor 拦截+redission 提供的分布式锁来进行控制</description>
+    <url>https://github.com/WangJi92/idempotent-spring-boot-starter</url>
     <properties>
         <java.version>1.8</java.version>
         <redisson.version>3.15.3</redisson.version>
     </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/WangJi92/idempotent-spring-boot-starter</url>
+        <connection>https://github.com/WangJi92/idempotent-spring-boot-starter.git</connection>
+        <developerConnection>https://github.com/WangJi92/idempotent-spring-boot-starter.gi</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <name>wangji</name>
+            <email>983433479@qq.com</email>
+            <url>https://github.com/WangJi92/idempotent-spring-boot-starter.gi</url>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -60,19 +82,23 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-javadoc-plugin</artifactId>-->
-<!--                <version>3.0.1</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>jar</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <doclint>none</doclint>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
