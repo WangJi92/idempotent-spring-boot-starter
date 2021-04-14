@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github.WangJi92</groupId>
     <artifactId>idempotent-spring-boot-starter</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3</version>
     <name>idempotent-spring-boot-starter</name>
     <description>幂等的，防止重复的提交，使用spring HandlerInterceptor 拦截+redission 提供的分布式锁来进行控制</description>
     <url>https://github.com/WangJi92/idempotent-spring-boot-starter</url>

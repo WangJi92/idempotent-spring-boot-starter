@@ -1,6 +1,5 @@
 package com.wangji92.springboot.idempotent.keygen.iml;
 
-import com.wangji92.springboot.idempotent.IdempotentProperties;
 import com.wangji92.springboot.idempotent.annotation.Idempotent;
 import com.wangji92.springboot.idempotent.keygen.LockKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * header -> cookie-> sesssionId
+ * header -> cookie-> sessionId
  *
  * @author 汪小哥
  * @date 10-04-2021
@@ -36,8 +35,6 @@ public class DefaultLockKeyResolver implements LockKeyGenerator {
     @Autowired
     private SessionIdLockKeyResolver sessionIdLockKeyResolver;
 
-    @Autowired
-    private IdempotentProperties idempotentProperties;
 
     @Override
     public String resolverLockKey(Idempotent idempotent, HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod) {

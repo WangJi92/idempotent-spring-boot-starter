@@ -173,7 +173,7 @@ public @interface Idempotent {
 <dependency>
   <groupId>com.github.WangJi92</groupId>
   <artifactId>idempotent-spring-boot-starter</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 ### redission 配置
@@ -210,6 +210,31 @@ public class GlobalExceptionHandler {
         return ResponseEntity.ok(message);
     }
 }
+```
+### 其他的配置
+* 需要设置一下拦截器的顺序，比如需要在登录校验拦截器之后
+* 设置拦截的路径
+* 设置 cookie or header 获取登录用户的key值
+* 设置是否需要自己手动注册 com.wangji92.springboot.idempotent.interceptor.IdempotentInterceptor
+```xml
+# 自动配置(自动将拦截器注册到webconfig) 非手动配置 拦截器
+spring.idempotent.manual-setting-idempotent-interceptor=false
+
+# 拦截器的order 位置(比如先要校验登录权限 这个order 设置靠后一点)
+spring.idempotent.idempotent-interceptor-order-value=500
+
+# 拦截的url
+spring.idempotent.include-urls=/**
+# 不进行拦截的url
+spring.idempotent.exclude-urls=/wangji,/wangji2
+
+
+# com.wangji92.springboot.idempotent.keygen.iml.DefaultLockKeyResolver 默认先找header 然后找 cookie 最后sessionId
+# 根据配置的key 去查找
+# 随便写一个 cookie
+spring.idempotent.default-lock-key-cookie-name=SESSION_ID
+# 随便找一个 user-agent
+spring.idempotent.default-lock-key-http-header-name=user-agent
 ```
 ### 注解使用
 #### sessionId+uri

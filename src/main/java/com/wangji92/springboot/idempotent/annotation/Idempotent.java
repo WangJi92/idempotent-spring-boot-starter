@@ -60,7 +60,7 @@ public @interface Idempotent {
     boolean unlockKey() default true;
 
     /**
-     * 生成锁 key 方式 默认为 sessionId +url
+     * 生成锁 key 方式 默认为  header -> cookie-> sessionId
      *
      * @return
      */

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -25,18 +26,17 @@ public class DemoWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(testInterceptor).addPathPatterns("/**");
-
+        InterceptorRegistration registration = registry.addInterceptor(testInterceptor);
+        registration.order(testInterceptor.getOrder());
+        registration.addPathPatterns("/**");
     }
 
     @Component
     public static class TestInterceptor implements HandlerInterceptor, Ordered {
 
-
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-            log.info("TestInterceptor");
+            log.info("验证一下order 设置");
             return true;
         }
 
