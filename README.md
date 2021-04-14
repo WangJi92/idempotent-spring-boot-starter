@@ -162,6 +162,9 @@ public @interface Idempotent {
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-web</artifactId>
 </dependency>
+
+<!-- redisson-spring-boot-starter 非必须依赖 注意一下boot的版本-->
+<!-- 存在 org.redisson.api.RedissonClient bean 即可-->
 <dependency>
   <groupId>org.redisson</groupId>
   <artifactId>redisson-spring-boot-starter</artifactId>
@@ -182,6 +185,7 @@ spring.redis.host=127.0.0.1
 spring.redis.port=6379
 ```
 ### 统一异常配置
+* 配置统一异常处理器 针对性展示自己想要展示的异常信息格式
 ```java
 @ControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 1)
