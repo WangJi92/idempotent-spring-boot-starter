@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface LockKeyGenerator {
     /**
+     * 没有找到值
+     */
+    String NOT_FOUND = "NOT_FOUND_VALUE";
+
+    /**
      * 获取处理缓存key
      *
      * @param idempotent    注解

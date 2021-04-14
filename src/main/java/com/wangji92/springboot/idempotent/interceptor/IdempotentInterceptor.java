@@ -1,5 +1,6 @@
 package com.wangji92.springboot.idempotent.interceptor;
 
+import com.wangji92.springboot.idempotent.IdempotentProperties;
 import com.wangji92.springboot.idempotent.annotation.Idempotent;
 import com.wangji92.springboot.idempotent.exception.IdempotentException;
 import com.wangji92.springboot.idempotent.keygen.LockKeyGenerator;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -25,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 10-04-2021
  */
 @Component
-public class IdempotentInterceptor implements HandlerInterceptor {
+public class IdempotentInterceptor implements HandlerInterceptor, Ordered {
 
     private static final Logger logger = LoggerFactory.getLogger(IdempotentInterceptor.class);
 
@@ -34,6 +36,9 @@ public class IdempotentInterceptor implements HandlerInterceptor {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private IdempotentProperties idempotentProperties;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -100,5 +105,14 @@ public class IdempotentInterceptor implements HandlerInterceptor {
         }
 
 
+    }
+
+    @Override
+    public int getOrder() {
+        Integer orderValue = idempotentProperties.getIdempotentInterceptorOrderValue();
+        if (orderValue == null) {
+            orderValue = Ordered.LOWEST_PRECEDENCE;
+        }
+        return orderValue;
     }
 }

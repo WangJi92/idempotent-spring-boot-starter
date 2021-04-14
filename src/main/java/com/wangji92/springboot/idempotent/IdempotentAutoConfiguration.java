@@ -5,6 +5,7 @@ import com.wangji92.springboot.idempotent.interceptor.IdempotentInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -12,8 +13,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.MessageCodesResolver;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +26,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -60,24 +63,44 @@ public class IdempotentAutoConfiguration {
         }
     }
 
+
     /**
      * 增加拦截器处理
      */
     @Configuration
-    @Order(value = Ordered.LOWEST_PRECEDENCE - 100)
+    @Order(value = Ordered.LOWEST_PRECEDENCE)
+    @ConditionalOnProperty(prefix = "spring.idempotent", value = "manual-setting-idempotent-interceptor", havingValue = "false", matchIfMissing = true)
     public static class IdempotentWebConfig implements WebMvcConfigurer {
 
         @Autowired
         private IdempotentInterceptor idempotentInterceptor;
 
+        @Autowired
+        private IdempotentProperties idempotentProperties;
+
         @Override
         public void addInterceptors(InterceptorRegistry registry) {
-            registry.addInterceptor(idempotentInterceptor).addPathPatterns("/**");
+            List<String> includeUrls = new ArrayList<>();
+            if (StringUtils.hasText(idempotentProperties.getIncludeUrls())) {
+                includeUrls = Arrays.asList(idempotentProperties.getIncludeUrls().split(","));
+            }
+            List<String> excludeUrls = new ArrayList<>();
+            if (StringUtils.hasText(idempotentProperties.getExcludeUrls())) {
+                excludeUrls = Arrays.asList(idempotentProperties.getExcludeUrls().split(","));
+            }
+
+            /**
+             * {@link InterceptorRegistry#getInterceptors() 这里的排序规则是根据InterceptorRegistration 的order}
+             */
+            InterceptorRegistration registration = registry.addInterceptor(idempotentInterceptor);
+            registration.order(idempotentInterceptor.getOrder());
+            registration.excludePathPatterns(excludeUrls);
+            registration.addPathPatterns(includeUrls);
 
         }
 
-
         //region spring boot 5.x java 1.8 默认方法了 1.x 还不是
+
         /**
          * {@inheritDoc}
          * <p>This implementation is empty.
@@ -203,7 +226,6 @@ public class IdempotentAutoConfiguration {
          * <p>This implementation returns {@code null}.
          */
         @Override
-        @Nullable
         public Validator getValidator() {
             return null;
         }
@@ -213,7 +235,6 @@ public class IdempotentAutoConfiguration {
          * <p>This implementation returns {@code null}.
          */
         @Override
-        @Nullable
         public MessageCodesResolver getMessageCodesResolver() {
             return null;
         }
